@@ -1,6 +1,8 @@
 # Reverse Engineering an AquaForte WiFi Pond Pump
 
--> <span style="color:red">I have not yet figured out how to control this pump over the local network!</span>.
+```diff
+-(-> I have not yet figured out how to control this pump over the local network!)@@
+```
 
 My dad bought this [AquaForte DM Vario S 20000 pond pump](https://www.aqua-forte.com/product/aquaforte-dm-vario-s-20000-pond-pump-with-wi-fi/) with WiFi connectivity, in the hope that I could connect it to the solar panels and automatically turn up the pump when the electricity production is high. 
 Unfortunately, the app is anything but good and the pump itself is not controlled via the local network, but over a cloud. So I set myself the task of reverse engineering the pump controls. 
