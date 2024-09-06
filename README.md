@@ -350,3 +350,48 @@ curl -X POST "https://euapi.gizwits.com/app/control/{device-id}" \
 ```
 
 As repsone I got `{}` and the pump did not turn off.
+
+
+## 5. Protocol Code
+
+The following Code snippets are from [xuhongv's](https://github.com/xuhongv) implementation of the Gizwits protocol
+ 
+- [gizwits_protocol.h](https://raw.githubusercontent.com/xuhongv/StudyInEsp8266/master/Gizkit_soc_pet/app/Gizwits/gizwits_protocol.h)
+- [gizwits_protocol.c](https://raw.githubusercontent.com/xuhongv/StudyInEsp8266/master/Gizkit_soc_pet/app/Gizwits/gizwits_protocol.c) 
+
+```C
+/** Corresponding to the protocol "4.10 WiFi module control device" in the flag " attr_flags" */ 
+
+typedef struct {
+  uint8_t flagLED_OnOff:1;
+  uint8_t flagLED_Color:1;
+  uint8_t flagLED_R:1;
+  uint8_t flagLED_G:1;
+  uint8_t flagLED_B:1;
+  uint8_t flagMotor_Speed:1;
+} attrFlags_t;
+```
+
+Every Flag is 1 bit, so the entire attrFlags_t is only 1 Byte long!
+
+```C
+/** Corresponding protocol "4.10 WiFi module control device" in the data value "attr_vals" */
+
+typedef struct {
+  uint8_t wBitBuf[COUNT_W_BIT];
+  uint8_t valueLED_R;
+  uint8_t valueLED_G;
+  uint8_t valueLED_B;
+  uint8_t valueMotor_Speed;
+} attrVals_t;
+```
+
+```C
+/** The flag "attr_flags (1B)" + data value "P0 protocol area" in the corresponding protocol "4.10 WiFi module control device"attr_vals(6B)" */ 
+
+typedef struct {
+    attrFlags_t attrFlags;
+    attrVals_t  attrVals;
+}gizwitsIssued_t;
+```
+
