@@ -291,16 +291,21 @@ It returned `W00ESP82604020B30030000010303000000000002 c6b30f30e4444e818d97cfac5
 
 Translated to Hex so I can compare it with Apollon77's table in chapter [13/14](https://github.com/Apollon77/node-ph803w/blob/main/PROTOCOL.md#1314-wifi-module-information-tcp):
 
-```txt
 `57` - ?? `W`
+
 `30 30 45 53 50 38 32 36` - Wifi hardware version `00ESP826`
+
 `30 34 30 32 30 42 33 30` - Wifi software version `04020B30`
+
 `30 33 30 30 30 30 30 31` - MCU hardware version `03000001`
+
 `30 33 30 33 30 30 30 30` - MCU software version `03030000`
+
 `30 30 30 30 30 30 30 32` - p0 protocol payload version `00000002`
+
 ` ` - ?? `Space`
+
 `20 63 36 62 33 30 66 33 30 65 34 34 34 34 65 38 31 38 64 39 37 63 66 61 63 35 62 32 61 31 65 35 38` - Product Key `c6b30f30e4444e818d97cfac5b2a1e58`
-```
 
 
 ### 3.4. Data.js
