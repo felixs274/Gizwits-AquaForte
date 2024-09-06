@@ -47,7 +47,7 @@ The first MQTT packet, which should be the `off` command, had the following Mess
 
 That are 564 e, so I will just abbreviate it to e{564}.
 
-These are the 5 command packet I received:
+These are the 5 command packets I received:
 
 ```txt
 OFF - `00000003b20200009104101e0a64001418090400151f2f000000000164 e{564} 00`
@@ -291,6 +291,7 @@ It returned `W00ESP82604020B30030000010303000000000002 c6b30f30e4444e818d97cfac5
 
 Translated to Hex so I can compare it with Apollon77's table in chapter [13/14](https://github.com/Apollon77/node-ph803w/blob/main/PROTOCOL.md#1314-wifi-module-information-tcp):
 
+```txt
 `57` - ?? `W`
 `30 30 45 53 50 38 32 36` - Wifi hardware version `00ESP826`
 `30 34 30 32 30 42 33 30` - Wifi software version `04020B30`
@@ -299,7 +300,7 @@ Translated to Hex so I can compare it with Apollon77's table in chapter [13/14](
 `30 30 30 30 30 30 30 32` - p0 protocol payload version `00000002`
 ` ` - ?? `Space`
 `20 63 36 62 33 30 66 33 30 65 34 34 34 34 65 38 31 38 64 39 37 63 66 61 63 35 62 32 61 31 65 35 38` - Product Key `c6b30f30e4444e818d97cfac5b2a1e58`
-
+```
 
 
 ### 3.4. Data.js
@@ -354,7 +355,7 @@ As repsone I got `{}` and the pump did not turn off.
 
 ## 5. Protocol Code
 
-The following Code snippets are from [xuhongv's](https://github.com/xuhongv) implementation of the Gizwits protocol
+The following Code snippets are from [xuhongv's](https://github.com/xuhongv) implementation of the Gizwits protocol.
  
 - [gizwits_protocol.h](https://raw.githubusercontent.com/xuhongv/StudyInEsp8266/master/Gizkit_soc_pet/app/Gizwits/gizwits_protocol.h)
 - [gizwits_protocol.c](https://raw.githubusercontent.com/xuhongv/StudyInEsp8266/master/Gizkit_soc_pet/app/Gizwits/gizwits_protocol.c) 
@@ -392,6 +393,6 @@ typedef struct {
 typedef struct {
     attrFlags_t attrFlags;
     attrVals_t  attrVals;
-}gizwitsIssued_t;
+} gizwitsIssued_t;
 ```
 
