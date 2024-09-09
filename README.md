@@ -1,8 +1,9 @@
 # Reverse Engineering an AquaForte WiFi Pond Pump
 
-```diff
--> I have not yet figured out how to control this pump over the local network!
-```
+
+> [!NOTE]  
+> I have not yet figured out how to control this pump over the local network!
+
 
 My dad bought this [AquaForte DM Vario S 20000 pond pump](https://www.aqua-forte.com/product/aquaforte-dm-vario-s-20000-pond-pump-with-wi-fi/) with WiFi connectivity, in the hope that I could connect it to the solar panels and automatically turn up the pump when the electricity production is high. 
 Unfortunately, the app is anything but good and the pump itself is not controlled via the local network, but over a cloud. So I set myself the task of reverse engineering the pump controls. 
@@ -42,7 +43,7 @@ I used the App to set the pump to the following settings and read the traffic:
 - Speed 30
 
 I was able to receive 6 mqtt packets. 
-5 of them were ‘Publish Message [dev2app/{device-id}]’. The other one was a MQTT Ping Request.
+5 of them were `Publish Message [dev2app/{device-id}]`. The other one was a MQTT Ping Request.
 The source was the pump and the destination was the server mentioned above. 
 
 The first MQTT packet, which should be the `off` command, had the following Message:
@@ -55,13 +56,9 @@ These are the 5 command packets I received:
 
 ```txt
 OFF - `00000003b20200009104101e0a64001418090400151f2f000000000164 e{564} 00`
-
 ON - `00000003b20200009104111e0a64001418090400151f2f000000000164 e{564} 00`
-
 Speed 47 - `00000003b20200009104112f0a64001418090400151f2f000000000164 e{564} 00`
-
 Speed 81 - `00000003b2020000910411510a64001418090400151f2f000000000164 e{564} 00`
-
 Speed 30 - `00000003b20200009104111e0a64001418090400151f2f000000000164 e{564} 00`
 ```
 
@@ -79,7 +76,7 @@ The Hex `1e` in the first command is Decimal `30`, which is the initial Speed th
 
 In the second command the `1e` can be seen again, but this time preceded by a `1` instead of a `0`.
 
-In the remaining three commands you can recognise the `1` again, followed by the speeds I set in the App. Hex `2f` is Dec `47`, Hex `51` is Dec `81` and Hex 1e` is again Dec `30`.
+In the remaining three commands you can recognise the `1` again, followed by the speeds I set in the App. Hex `2f` is Dec `47`, Hex `51` is Dec `81` and Hex `1e` is again Dec `30`.
 
 Lets split the command into bytes.
 
@@ -139,7 +136,9 @@ Thanks to the unencrypted request on `/app/users/terms`, I know my `user-token` 
 ### 2.1. Device Info
 
 ```bash
-curl -X GET "https://euapi.gizwits.com/app/devices/{device-id}" -H "X-Gizwits-Application-Id: {app-id}" -H "X-Gizwits-User-token: {user-token}"
+curl -X GET "https://euapi.gizwits.com/app/devices/{device-id}" \
+-H "X-Gizwits-Application-Id: {app-id}" \
+-H "X-Gizwits-User-token: {user-token}"
 ```
 
 ```json
@@ -170,12 +169,14 @@ curl -X GET "https://euapi.gizwits.com/app/devices/{device-id}" -H "X-Gizwits-Ap
 
 `户外水泵` translates to `Outdoor water pump`.
 
-No we also know the Product Key and the Passcode.
+Now we also know the Product Key and the Passcode.
 
 ### 2.2. Online Log
 
 ```bash
-curl -X GET "https://euapi.gizwits.com/app/devices/{device-id}/raw_data?type=online&start_time=1725477480&end_time=1725484860" -H "X-Gizwits-Application-Id: {app-id}" -H "X-Gizwits-User-token: {user-token}"
+curl -X GET "https://euapi.gizwits.com/app/devices/{device-id}/raw_data?type=online&start_time=1725477480&end_time=1725484860" \
+-H "X-Gizwits-Application-Id: {app-id}" \
+-H "X-Gizwits-User-token: {user-token}"
 ```
 
 ```json
@@ -215,7 +216,9 @@ curl -X GET "https://euapi.gizwits.com/app/devices/{device-id}/raw_data?type=onl
 Sadly, the query of the cmd log did not work. This would probably have helped a lot to understand how to control the pump.
 
 ```bash
-curl -X GET "https://euapi.gizwits.com/app/devices/{device-id}/raw_data?type=cmd&start_time=1725477480&end_time=1725484860" -H "X-Gizwits-Application-Id: {app-id}" -H "X-Gizwits-User-token: {user-token}"
+curl -X GET "https://euapi.gizwits.com/app/devices/{device-id}/raw_data?type=cmd&start_time=1725477480&end_time=1725484860" \
+-H "X-Gizwits-Application-Id: {app-id}" \
+-H "X-Gizwits-User-token: {user-token}"
 ```
 
 ```json
@@ -271,7 +274,7 @@ I recieved my passcode as an ASCII String.
 
 ### 3.2. Login
 
-I tried to login, but I never got an answer. I tried two ways of sending the passcode to the device, but neither of them worked.
+I tried to login, but I never got a normal answer. I tried two ways of sending the passcode to the device, but neither of them worked.
 
 ```bash
 echo "00 00 00 03 0f 00 00 08 00 0a PASSCODE" | xxd -r -p | ncat {device-ip} 12416
